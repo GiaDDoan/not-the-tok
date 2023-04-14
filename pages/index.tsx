@@ -1,7 +1,5 @@
-import Image from 'next/image'
-// import { Inter } from 'next/font/google'
-
-// const inter = Inter({ subsets: ['latin'] })
+import Image from 'next/image';
+import axios from 'axios';
 
 export default function Home() {
   return (
@@ -9,4 +7,14 @@ export default function Home() {
       Hellow world!
     </h1>
   )
+}
+
+export const getServerSideProps = async () => {
+  const response = await axios.get(`http://localhost:3000/api/post`);
+
+  console.log(response.data.name);
+
+  return {
+    props: {}
+  }
 }
