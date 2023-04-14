@@ -1,20 +1,36 @@
 import Image from 'next/image';
 import axios from 'axios';
+import { Video } from '../types';
+import VideoCard from '../components/VideoCard';
+import NoResults from '../components/NoResults';
 
-export default function Home() {
+interface IProps {
+  videos: Video[]
+}
+
+export default function Home({ videos }: IProps) {
+
+  console.log(videos)
   return (
-    <h1 className='text-3xl font-bold underline'>
-      Hellow world!
-    </h1>
+    <div className='flex flex-col gap-10 videos h-full'>
+      {videos.length ? (
+        videos.map((video: Video) => (
+            <VideoCard post={video} key={video._id} />
+          ))
+        ) : (
+          <NoResults  text={'No videos'} />
+      )}
+    </div>
   )
 }
 
 export const getServerSideProps = async () => {
-  const response = await axios.get(`http://localhost:3000/api/post`);
+  const { data } = await axios.get(`http://localhost:3000/api/post`);
 
-  console.log(response.data.name);
 
   return {
-    props: {}
+    props: {
+      videos: data
+    }
   }
 }
